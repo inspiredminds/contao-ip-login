@@ -1,0 +1,45 @@
+{
+    "name": "inspiredminds/contao-ip-login",
+    "description": "Contao extension to allow automatic IP based front end login.",
+    "type": "contao-bundle",
+    "homepage": "https://github.com/inspiredminds/contao-ip-login",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Fritz Michael Gschwantner",
+            "homepage": "http://www.inspiredminds.at",
+            "email": "fmg@inspiredminds.at",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/inspiredminds/contao-ip-login/issues",
+        "source": "https://github.com/inspiredminds/contao-ip-login"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/fritzmg"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "contao/core-bundle": "^4.9",
+        "symfony/config": "^4.4",
+        "symfony/dependency-injection": "^4.4",
+        "symfony/http-foundation": "^4.4",
+        "symfony/http-kernel": "^4.4",
+        "symfony/security-guard": "^4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "InspiredMinds\\ContaoIpLoginBundle\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "InspiredMinds\\ContaoIpLoginBundle\\ContaoManager\\Plugin"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16"
+    }
+}
