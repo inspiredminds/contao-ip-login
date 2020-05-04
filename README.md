@@ -6,8 +6,8 @@ Contao IP Login
 
 Contao extension to allow front end members to be automatically logged in by IP.
 An **Allow IP based auto login** and **Allowed IPs** setting is provided for members 
-in the back end. The **Allowed IPs** setting allows to choose from a set of IPs
-which are configured via the bundle configuration:
+in the back end. The **Allowed IPs** setting offers a set of IPs which are configured 
+via the bundle configuration:
 
 ```yml
 # config/config.yml
