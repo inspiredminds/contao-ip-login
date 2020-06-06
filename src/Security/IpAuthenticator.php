@@ -16,6 +16,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Contao\MemberModel;
 use Contao\StringUtil;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -46,7 +47,7 @@ class IpAuthenticator extends AbstractGuardAuthenticator
         }
 
         // Support only allowed IPs
-        return \in_array($request->getClientIp(), $this->allowedIps, true);
+        return IpUtils::checkIp($request->getClientIp(), $this->allowedIps);
     }
 
     public function getCredentials(Request $request): ?string
@@ -77,7 +78,7 @@ class IpAuthenticator extends AbstractGuardAuthenticator
             foreach ($members as $member) {
                 $memberIps = $stringUtil->deserialize($member->allowed_ips, true);
 
-                if (\in_array($credentials, $memberIps, true)) {
+                if (IpUtils::checkIp($credentials, $memberIps)) {
                     return $userProvider->loadUserByUsername($member->username);
                 }
             }
