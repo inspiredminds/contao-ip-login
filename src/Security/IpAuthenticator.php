@@ -78,14 +78,15 @@ class IpAuthenticator extends AbstractGuardAuthenticator
         return IpUtils::checkIp($request->getClientIp(), $this->allowedIps);
     }
 
-    public function getCredentials(Request $request): ?string
+    public function getCredentials(Request $request): string
     {
         return $request->getClientIp();
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
-        if (null === $credentials) {
+        // If there already is a user logged in, don't to anything
+        if (null !== $this->security->getUser()) {
             return null;
         }
 
