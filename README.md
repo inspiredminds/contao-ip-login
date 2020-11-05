@@ -25,5 +25,5 @@ contao_iplogin:
         - '/login$'
         - '/logout$'
     # Additional conditions on the request can be set
-    request_condition: "'GET' === request.getMethod() && !request.isXmlHttpReuest()"
+    request_condition: "'GET' === request.getMethod() && !request.isXmlHttpRequest()"
 ```
