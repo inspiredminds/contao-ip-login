@@ -12,6 +12,7 @@ configured via the bundle configuration:
 ```yml
 # config/config.yml
 contao_iplogin:
+    # All allowed IPs
     allowed_ips:
         - '239.27.9.125'
         - '245.107.230.190'
@@ -19,4 +20,10 @@ contao_iplogin:
         - 'c43c:2fa4:3833:b00a:4270:3a4a:3:69e7'
         - '85ca:d480:ef8f:f834:d788:6ce2:d031:4e1'
         - '7d45:d6aa:48fd:e386:1b23:e502:f9db:913b'
+    # These paths are ignored from the automatic IP based login
+    ignored_paths:
+        - '/login$'
+        - '/logout$'
+    # Additional conditions on the request can be set
+    request_condition: "'GET' === request.getMethod() && !request.isXmlHttpReuest()"
 ```

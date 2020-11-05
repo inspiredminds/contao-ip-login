@@ -26,6 +26,9 @@ class ContaoIpLoginExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
         $container->setParameter('contao_iplogin.allowed_ips', $config['allowed_ips']);
+        $container->setParameter('contao_iplogin.ignored_paths', $config['ignored_paths']);
+        $container->setParameter('contao_iplogin.request_condition', $config['request_condition']);
     }
 }

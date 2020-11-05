@@ -16,6 +16,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Contao\MemberModel;
 use Contao\StringUtil;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,19 +29,46 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class IpAuthenticator extends AbstractGuardAuthenticator
 {
+    /** @var Security */
     private $security;
+
+    /** @var ContaoFramework */
     private $framework;
+
+    /** @var array<string> */
     private $allowedIps;
 
-    public function __construct(Security $security, ContaoFramework $framework, array $allowedIps)
+    /** @var array<string> */
+    private $ignoredPaths;
+
+    /** @var string|null */
+    private $requestCondition;
+
+    public function __construct(Security $security, ContaoFramework $framework, array $allowedIps, array $ignoredPaths, ?string $requestCondition)
     {
         $this->security = $security;
         $this->framework = $framework;
         $this->allowedIps = $allowedIps;
+        $this->ignoredPaths = $ignoredPaths;
+        $this->requestCondition = $requestCondition;
     }
 
     public function supports(Request $request): bool
     {
+        // Check for any ignored paths
+        foreach ($this->ignoredPaths as $ignoredPath) {
+            if (preg_match('@'.$ignoredPath.'@', $request->getPathInfo())) {
+                return false;
+            }
+        }
+
+        // Check for request condition
+        if (null !== $this->requestCondition) {
+            if (!(new ExpressionLanguage())->evaluate($this->requestCondition, ['request' => $request])) {
+                return false;
+            }
+        }
+
         // If there already is a user logged in, don't to anything
         if ($this->security->getUser()) {
             return false;

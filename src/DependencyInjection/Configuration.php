@@ -28,6 +28,15 @@ class Configuration implements ConfigurationInterface
                     ->scalarPrototype()->end()
                     ->defaultValue([])
                 ->end()
+                ->arrayNode('ignored_paths')
+                    ->info('IP login will be disabled on these paths. Can be regular expressions.')
+                    ->scalarPrototype()->end()
+                    ->defaultValue([])
+                ->end()
+                ->scalarNode('request_condition')
+                    ->info('Optional expression language condition on the request. The request object is available via the \'request\' variable.')
+                    ->defaultValue(null)
+                ->end()
             ->end()
         ;
 
