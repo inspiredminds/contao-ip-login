@@ -11,7 +11,7 @@ configured via the bundle configuration:
 
 ```yml
 # config/config.yml
-contao_iplogin:
+contao_ip_login:
     # All allowed IPs
     allowed_ips:
         - '239.27.9.125'

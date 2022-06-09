@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('contao_iplogin');
+        $treeBuilder = new TreeBuilder('contao_ip_login');
         $treeBuilder
             ->getRootNode()
             ->children()
