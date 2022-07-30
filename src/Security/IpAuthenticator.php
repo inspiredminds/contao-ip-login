@@ -16,6 +16,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Date;
 use Contao\MemberModel;
 use Contao\StringUtil;
+use InspiredMinds\ContaoIpLoginBundle\Exception\InvalidIpAuthenticationException;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class IpAuthenticator extends AbstractGuardAuthenticator
+class IpAuthenticator extends AbstractAuthenticator
 {
     /** @var Security */
     private $security;
@@ -78,18 +80,8 @@ class IpAuthenticator extends AbstractGuardAuthenticator
         return IpUtils::checkIp($request->getClientIp(), $this->allowedIps);
     }
 
-    public function getCredentials(Request $request): string
+    public function authenticate(Request $request): Passport
     {
-        return $request->getClientIp();
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
-    {
-        // If there already is a user logged in, don't to anything
-        if (null !== $this->security->getUser()) {
-            return null;
-        }
-
         $this->framework->initialize();
 
         /** @var MemberModel $memberAdapter */
@@ -107,18 +99,13 @@ class IpAuthenticator extends AbstractGuardAuthenticator
             foreach ($members as $member) {
                 $memberIps = $stringUtil->deserialize($member->allowed_ips, true);
 
-                if (IpUtils::checkIp($credentials, $memberIps)) {
-                    return $userProvider->loadUserByUsername($member->username);
+                if (IpUtils::checkIp($request->getClientIp(), $memberIps)) {
+                    return new SelfValidatingPassport(new UserBadge($member->username));
                 }
             }
         }
 
-        return null;
-    }
-
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        return true;
+        throw new InvalidIpAuthenticationException('Invalid IP for IP login.');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
@@ -127,16 +114,6 @@ class IpAuthenticator extends AbstractGuardAuthenticator
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
-        return null;
-    }
-
-    public function supportsRememberMe(): bool
-    {
-        return false;
-    }
-
-    public function start(Request $request, AuthenticationException $authException = null): ?Response
     {
         return null;
     }
