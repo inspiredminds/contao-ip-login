@@ -10,19 +10,13 @@ declare(strict_types=1);
 
 namespace InspiredMinds\ContaoIpLoginBundle\EventListener\DataContainer;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 
-/**
- * @Callback(table="tl_member", target="fields.allowed_ips.options")
- */
-class MemberAllowedIpsOptionsCallback implements ServiceAnnotationInterface
+#[AsCallback('tl_member', 'fields.allowed_ips.options')]
+class MemberAllowedIpsOptionsCallback
 {
-    private $allowedIps;
-
-    public function __construct(array $allowedIps)
+    public function __construct(private readonly array $allowedIps)
     {
-        $this->allowedIps = $allowedIps;
     }
 
     public function __invoke(): array

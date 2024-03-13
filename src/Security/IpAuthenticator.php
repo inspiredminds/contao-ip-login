@@ -17,13 +17,13 @@ use Contao\Date;
 use Contao\MemberModel;
 use Contao\StringUtil;
 use InspiredMinds\ContaoIpLoginBundle\Exception\InvalidIpAuthenticationException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -31,38 +31,19 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class IpAuthenticator extends AbstractAuthenticator
 {
-    /**
-     * @var Security
-     */
-    private $security;
-
-    /**
-     * @var ContaoFramework
-     */
-    private $framework;
-
-    /**
-     * @var array<string>
-     */
-    private $allowedIps;
-
-    /**
-     * @var array<string>
-     */
-    private $ignoredPaths;
-
-    /**
-     * @var string|null
-     */
-    private $requestCondition;
-
-    public function __construct(Security $security, ContaoFramework $framework, array $allowedIps, array $ignoredPaths, string|null $requestCondition)
-    {
-        $this->security = $security;
-        $this->framework = $framework;
-        $this->allowedIps = $allowedIps;
-        $this->ignoredPaths = $ignoredPaths;
-        $this->requestCondition = $requestCondition;
+    public function __construct(
+        private readonly Security $security,
+        private readonly ContaoFramework $framework,
+        /**
+         * @var array<string>
+         */
+        private readonly array $allowedIps,
+        /**
+         * @var array<string>
+         */
+        private readonly array $ignoredPaths,
+        private readonly string|null $requestCondition,
+    ) {
     }
 
     public function supports(Request $request): bool
