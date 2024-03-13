@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the ContaoIpLoginBundle.
+ * This file is part of the Contao IP Login extension.
  *
- * (c) inspiredminds
- *
- * @license LGPL-3.0-or-later
+ * (c) INSPIRED MINDS
  */
 
 $GLOBALS['TL_LANG']['tl_member']['allow_ip_login'] = ['IP-basierten Autologin erlauben', 'Erlaubt den automatischen Login basierend auf vordefinierten IPs.'];

@@ -31,22 +31,32 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class IpAuthenticator extends AbstractAuthenticator
 {
-    /** @var Security */
+    /**
+     * @var Security
+     */
     private $security;
 
-    /** @var ContaoFramework */
+    /**
+     * @var ContaoFramework
+     */
     private $framework;
 
-    /** @var array<string> */
+    /**
+     * @var array<string>
+     */
     private $allowedIps;
 
-    /** @var array<string> */
+    /**
+     * @var array<string>
+     */
     private $ignoredPaths;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $requestCondition;
 
-    public function __construct(Security $security, ContaoFramework $framework, array $allowedIps, array $ignoredPaths, ?string $requestCondition)
+    public function __construct(Security $security, ContaoFramework $framework, array $allowedIps, array $ignoredPaths, string|null $requestCondition)
     {
         $this->security = $security;
         $this->framework = $framework;
@@ -108,12 +118,12 @@ class IpAuthenticator extends AbstractAuthenticator
         throw new InvalidIpAuthenticationException('Invalid IP for IP login.');
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response|null
     {
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response|null
     {
         return null;
     }

@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $allowedIps: '%contao_iplogin.allowed_ips%'
+            $ignoredPaths: '%contao_iplogin.ignored_paths%'
+            $requestCondition: '%contao_iplogin.request_condition%'
+
+    InspiredMinds\ContaoIpLoginBundle\:
+        resource: ../src/
+        exclude: ../src/{ContaoManager,DependencyInjection,Resources}
