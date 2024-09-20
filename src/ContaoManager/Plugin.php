@@ -36,7 +36,7 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface
         }
 
         foreach ($extensionConfigs as &$extensionConfig) {
-            if (isset($extensionConfig['firewalls'], $extensionConfig['firewalls']['contao_frontend'])) {
+            if (isset($extensionConfig['firewalls']['contao_frontend'])) {
                 $extensionConfig['firewalls']['contao_frontend']['custom_authenticators'][] = IpAuthenticator::class;
             }
         }
