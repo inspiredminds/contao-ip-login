@@ -41,8 +41,6 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface
             }
         }
 
-        $extensionConfigs[] = ['enable_authenticator_manager' => true];
-
         return $extensionConfigs;
     }
 }
